@@ -2,7 +2,7 @@
 
 // Boilerplate special characters pulled from the web
 
-var specialChar = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "\:", "\;", " < ", "=", " > ", " ? ", "@", "[", "\\", "]", " ^ ", "_", "`", "{", "|", "}", "~"];
+var specialChar = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "\:", "\;", "<", "=", ">", " ? ", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~"];
 
 var numeral = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -49,17 +49,41 @@ function generatePassword() {
     var useNumber = confirm("Would you like your password to contain numbers?");
     var useLower = confirm("Would you like your password to contain lower case letters?");
     var useUpper = confirm("Would you like your password to contain upper case letters?");
-    console.log(useSpecial, useNumber, useLower, useUpper);
   }
 
+  password.innerText = combine(useSpecial, useNumber, useLower, useUpper, pwLength);
 
+  function combine(special, number, lower, upper, pwLength) {
+    var pw = '';
+    var count = special + number + lower + upper;
+    console.log('count: ', count);
+    var types = [{special}, {number}, {upper}, {lower}].filter(item => Object.values(item)[0]);
+    console.log('types: ', types);
+
+    if (count === 0) {
+      alert("You must make a choice of characters");
+      return '';
+    }
+
+    for (var i = 0; i < pwLength; i += count) {
+      types.forEach(char => {
+        var returnChar = Object.keys(char)[0];
+        console.log(pwLength);
+        console.log('returnChar ', returnChar);
+        pw += random[returnChar]();
+      });
+    }
+    final = pw.slice(0, pwLength);
+    console.log(final);
+    
+  }
+  return final;
 }
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
-  //var passwordText = document.querySelector("#password");
-
-  //passwordText.value = password;
+  var passwordText = document.querySelector("#password");
+  passwordText.value = password;
 
 }
 
