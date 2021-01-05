@@ -2,6 +2,8 @@
 
 // Boilerplate special characters pulled from the web
 
+var pw = '';
+
 var specialChar = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "\:", "\;", "<", "=", ">", " ? ", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~"];
 
 var numeral = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -10,14 +12,6 @@ var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
 
 // Go through the alphabet array and generate a new array of all capital letters
 var alphabetCaps = alphabet.map(alphabet => alphabet.toUpperCase());
-
-// Object that holds results of the randomizing functions to get a bunch of different random characters
-var random = {
-  special: getRandomChar,
-  number: getRandomNumber,
-  lower: getRandomLower,
-  upper: getRandomUpper
-};
 
 function getRandomChar() {
   return specialChar[Math.floor(Math.random() * specialChar.length)];
@@ -35,14 +29,22 @@ function getRandomUpper(){
   
   return alphabetCaps[Math.floor(Math.random() * alphabetCaps.length)];
 }
-// Assignment Code
-var generateBtn = document.querySelector("#generate");
+
+// Object that holds results of the randomizing functions to get a bunch of different random characters that we can call later.
+
+var random = {
+  special: getRandomChar,
+  number: getRandomNumber,
+  lower: getRandomLower,
+  upper: getRandomUpper
+};
 
 function generatePassword() {
   
   var pwLength = parseInt(prompt("How long would you like your password to be? You can choose between 8 and 128"));
   if (!pwLength || pwLength < 8 || pwLength > 128) {
     alert("Invalid input, try again");
+    return;
   }
   else {
     var useSpecial = confirm("Would you like your password to contain special characters?");
@@ -54,7 +56,7 @@ function generatePassword() {
   password.innerText = combine(useSpecial, useNumber, useLower, useUpper, pwLength);
 
   function combine(special, number, lower, upper, pwLength) {
-    var pw = '';
+    
     var count = special + number + lower + upper;
     console.log('count: ', count);
     var types = [{special}, {number}, {upper}, {lower}].filter(item => Object.values(item)[0]);
@@ -65,20 +67,17 @@ function generatePassword() {
       return '';
     }
 
-    for (var i = 0; i < pwLength; i += count) {
-      types.forEach(char => {
-        var returnChar = Object.keys(char)[0];
-        console.log(pwLength);
-        console.log('returnChar ', returnChar);
-        pw += random[returnChar]();
-      });
+    for (var i = 0; i < pwLength; i++) {
+      var rand = Math.floor(Math.random() * types.length);
+      pw += random[Object.keys(types[rand])[0]]();
     }
-    final = pw.slice(0, pwLength);
-    console.log(final);
-    
   }
-  return final;
+  return pw;
 }
+
+// Assignment Code
+var generateBtn = document.querySelector("#generate");
+
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
